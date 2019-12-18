@@ -18,6 +18,7 @@
   "homepage": "https://github.com/AndrewGerdel/BinanceVSBitstampVSKraken#readme",
   "dependencies": {
     "binance-api-node": "^0.9.12",
+    "kraken-api": "^1.0.0",
     "node-bitstamp": "^2.3.0",
     "node-kraken-api": "^0.4.1"
   }
