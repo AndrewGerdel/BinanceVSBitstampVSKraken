@@ -1,0 +1,24 @@
+{
+  "name": "binancevsbitstampvskraken",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/AndrewGerdel/BinanceVSBitstampVSKraken.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/AndrewGerdel/BinanceVSBitstampVSKraken/issues"
+  },
+  "homepage": "https://github.com/AndrewGerdel/BinanceVSBitstampVSKraken#readme",
+  "dependencies": {
+    "binance-api-node": "^0.9.12",
+    "node-bitstamp": "^2.3.0",
+    "node-kraken-api": "^0.4.1"
+  }
+}
