@@ -32,21 +32,26 @@ var DoIt = (async (currencyPair, bitstampCurrencyPair, krakenCurrencyPair) => {
     console.log(binanceAskPrice, binanceBidPrice);
 
     var bitstampResults = await bitstamp.orderBook(bitstampCurrencyPair);
-    var bitstampAskPrice = parseFloat(bitstampResults.body.asks[0][0]).toFixed(4);
-    var bitstampBidPrice = parseFloat(bitstampResults.body.bids[0][0]).toFixed(4);
+    var bitstampAskPrice = parseFloat(bitstampResults.body.asks[0][0]).toFixed(8);
+    var bitstampBidPrice = parseFloat(bitstampResults.body.bids[0][0]).toFixed(8);
     console.log(bitstampAskPrice, bitstampBidPrice);
 
     var krakenResults = await kraken.api('Ticker', { pair: krakenCurrencyPair });
-    var krakenBidPrice = parseFloat(krakenResults.result[krakenCurrencyPair].b[0]).toFixed(4);
-    var krakenAskPrice = parseFloat(krakenResults.result[krakenCurrencyPair].a[0]).toFixed(4);
+    var krakenBidPrice = parseFloat(krakenResults.result[krakenCurrencyPair].b[0]).toFixed(8);
+    var krakenAskPrice = parseFloat(krakenResults.result[krakenCurrencyPair].a[0]).toFixed(8);
     console.log(krakenAskPrice, krakenBidPrice);
 });
 
- DoIt('BTCUSD', CURRENCY.BTC_USD, 'XXBTZUSD').then(async(res, rej) => {
+
+ var CheckAll = (async() => {
+    await DoIt('BTCUSD', CURRENCY.BTC_USD, 'XXBTZUSD');
     await DoIt('ETHUSD', CURRENCY.ETH_USD, 'XETHZUSD');
     await DoIt('XRPUSD', CURRENCY.XRP_USD, 'XXRPZUSD');
+    await DoIt('XRPBTC', CURRENCY.XRP_BTC, 'XXRPXXBT');
     await DoIt('LTCUSD', CURRENCY.LTC_USD, 'XLTCZUSD');
  });
+
+ CheckAll();
 
 // DoIt('XRPUSD', CURRENCY.XRP_USD, 'XXRPZUSD').then((res, rej) => {
 //     DoIt('BTCUSD', CURRENCY.BTC_USD, 'XRPXBT');
