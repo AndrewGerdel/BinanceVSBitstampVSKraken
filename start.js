@@ -29,30 +29,57 @@ var DoIt = (async (currencyPair, bitstampCurrencyPair, krakenCurrencyPair) => {
     var binanceResults = await binanceClient.book({ symbol: currencyPair, limit: 5 });
     var binanceAskPrice = binanceResults.asks[0].price
     var binanceBidPrice = binanceResults.bids[0].price
-    console.log(binanceAskPrice, binanceBidPrice);
 
     var bitstampResults = await bitstamp.orderBook(bitstampCurrencyPair);
     var bitstampAskPrice = parseFloat(bitstampResults.body.asks[0][0]).toFixed(8);
     var bitstampBidPrice = parseFloat(bitstampResults.body.bids[0][0]).toFixed(8);
-    console.log(bitstampAskPrice, bitstampBidPrice);
 
     var krakenResults = await kraken.api('Ticker', { pair: krakenCurrencyPair });
     var krakenBidPrice = parseFloat(krakenResults.result[krakenCurrencyPair].b[0]).toFixed(8);
     var krakenAskPrice = parseFloat(krakenResults.result[krakenCurrencyPair].a[0]).toFixed(8);
-    console.log(krakenAskPrice, krakenBidPrice);
+
+    var highestBid = binanceBidPrice;
+    var highest = 'Binance';
+    if (bitstampBidPrice > highestBid) {
+        highestBid = bitstampBidPrice;
+        highest = 'Bitstamp';
+    }
+    if (krakenBidPrice > highestBid) {
+        highestBid = krakenBidPrice;
+        highest = 'Kraken';
+    }
+
+    var lowestAsk = binanceAskPrice;
+    var lowest = 'Binance';
+    if (bitstampAskPrice < lowestAsk) {
+        lowestAsk = bitstampAskPrice;
+        lowest = 'Bitstamp';
+    }
+    if (krakenAskPrice < lowestAsk) {
+        lowestAsk = krakenAskPrice;
+        lowest = 'Kraken';
+    }
+
+    var diffPercent = ((highestBid - lowestAsk) / highestBid) * 100;
+    if (diffPercent >= 0.6)
+        console.log('%s: %s VS %s: Highest Bid: %s.  Lowest Ask: %s.  Difference: %s.  Diff Percentage: %s', currencyPair, highest, lowest, highestBid, lowestAsk, (highestBid - lowestAsk), diffPercent);
+
+
 });
 
 
- var CheckAll = (async() => {
+var CheckAll = (async () => {
     await DoIt('BTCUSD', CURRENCY.BTC_USD, 'XXBTZUSD');
     await DoIt('ETHUSD', CURRENCY.ETH_USD, 'XETHZUSD');
     await DoIt('XRPUSD', CURRENCY.XRP_USD, 'XXRPZUSD');
     await DoIt('XRPBTC', CURRENCY.XRP_BTC, 'XXRPXXBT');
     await DoIt('LTCUSD', CURRENCY.LTC_USD, 'XLTCZUSD');
- });
+});
 
- CheckAll();
-
+CheckAll();
+setInterval(() => {
+    CheckAll();
+}, 30000);
 // DoIt('XRPUSD', CURRENCY.XRP_USD, 'XXRPZUSD').then((res, rej) => {
 //     DoIt('BTCUSD', CURRENCY.BTC_USD, 'XRPXBT');
 
